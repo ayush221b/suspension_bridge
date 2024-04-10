@@ -1,0 +1,20 @@
+name: suspension_bridge
+description: This provides a communication layer that multiple Flutter projects/modules can use to communicate with each other.
+version: 0.0.1
+homepage: https://github.com/ayush221b/suspension_bridge
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+# The following section is specific to Flutter packages.
+flutter:
