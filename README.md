@@ -1,39 +1,75 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Suspension Bridge
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+This simple but powerful package provides a communication layer that can bridge multiple Flutter projects together.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+Suspension Bridge facilitates the following:
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+1. Two way data communication
+2. Two way method call handling and method invocations
 
-## Features
+This project is heavily inspired by the Method Channel API.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## Data Passage
 
-## Getting started
+You can save data to a channel.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+```
+SuspensionBridge().addChannelData(
+      'investment',
+      'authData',
+      {
+        "accessToken": "<some token string>",
+        "refreshToken" "<some token string>"
+      },
+    );
 ```
 
-## Additional information
+The same data can then be extracted in another Flutter project.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```
+final authData = SuspensionBridge().getChannelData(
+      'investment',
+      'authData',
+    );
+```
+
+## Method Call Handling
+
+Register method call hanlders.
+
+```
+SuspensionBridge().registerMethodCallHandler(
+    'golden-gate-bridge',
+    (SuspensionBridgeMethod method) {
+      print('Received method call: ${method.methodName}');
+      if (method.methodName == 'print') {
+        print(method.methodData?.runtimeType);
+        print(method.methodData);
+      } else if (method.methodName == 'prettyPrint') {
+        print('-- Pretty print starts --');
+        print(method.methodData?.runtimeType);
+        print(method.methodData);
+        print('-- Pretty print ends --');
+      }
+    },
+  );
+```
+
+Invoke methods from different locations.
+```
+SuspensionBridge().invokeMethod(
+'golden-gate-bridge',
+SuspensionBridgeMethod(
+    'prettyPrint',
+    methodData: 'Hello, world! Welcome to Golden Gate Bridge!',
+),
+);
+
+SuspensionBridge().invokeMethod(
+'golden-gate-bridge',
+SuspensionBridgeMethod(
+    'print',
+    methodData: ['Hello', 'world!'],
+),
+);
+```
